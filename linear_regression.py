@@ -8,7 +8,7 @@ class LinearRegression(LinearModel):
     Linear Regression class.
     """
 
-    def fit(self, X: np.ndarray, y: np.ndarray, epoches: int = 1000):
+    def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 1000):  # Исправлено имя параметра
         """
         Trains the model using gradient descent.
 
@@ -17,17 +17,16 @@ class LinearRegression(LinearModel):
             y (np.ndarray): Target vector.
             epochs (int): Number of training epochs.
         """
-
         n_samples, n_features = X.shape
-        self.weights = np.zeros(n_samples)
+        self.weights = np.zeros(n_features)  # Исправлено здесь
         self.bias = 0.0
 
-        for epoch in range(epoches):
+        for epoch in range(epochs):  # Используем исправленный параметр
             y_pred = X.dot(self.weights) + self.bias
             error = y_pred - y
 
             # Calculate gradients
-            dw  = (1 / n_samples) * X.dot(error) + self.l1_reg * np.sign(self.weights) + self.l2_reg * self.weights
+            dw = (1 / n_samples) * X.T.dot(error) + self.l1_reg * np.sign(self.weights) + self.l2_reg * self.weights
             db = (1 / n_samples) * np.sum(error)
 
             # Update parameters
@@ -49,6 +48,7 @@ class LinearRegression(LinearModel):
             np.ndarray: Predicted target values.
         """
         return X.dot(self.weights) + self.bias
+
 
 
     def _compute_loss(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
